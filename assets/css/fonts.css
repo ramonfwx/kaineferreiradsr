@@ -1,0 +1,55 @@
+@font-face {
+  font-family: "Epilogue";
+  src: url("../fonts/EPILOGUE-THIN.TTF") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Epilogue";
+  src: url("../fonts/EPILOGUE-LIGHT.TTF") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Epilogue";
+  src: url("../fonts/EPILOGUE-REGULAR.TTF") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Epilogue";
+  src: url("../fonts/EPILOGUE-ITALIC.TTF") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Epilogue";
+  src: url("../fonts/EPILOGUE-MEDIUM.TTF") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Epilogue";
+  src: url("../fonts/EPILOGUE-BOLD.TTF") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Epilogue";
+  src: url("../fonts/EPILOGUE-BLACK.TTF") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
