@@ -18,6 +18,8 @@ button { font: inherit; background: none; border: none; cursor: pointer; }
   --chrome-1: #e8e8e6;
   --chrome-2: #8b8b88;
   --chrome-3: #3a3a38;
+  --accent: #3e63ff;
+  --accent-soft: rgba(62,99,255,0.15);
   --radius-blob: 62% 38% 45% 55% / 55% 40% 60% 45%;
   --ease: cubic-bezier(.16,.84,.44,1);
 }
@@ -153,8 +155,8 @@ body {
   content: "";
   position: absolute;
   bottom: 0; left: 0;
-  width: 100%; height: 1px;
-  background: var(--off-white);
+  width: 100%; height: 2px;
+  background: var(--accent);
 }
 
 .header-cta { flex-shrink: 0; }
@@ -170,6 +172,17 @@ body {
   background: var(--off-white);
   border-radius: 2px;
   transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+
+/* ---------- Geometric texture ---------- */
+.geo-texture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cg fill='none' stroke='%23f4f3ef' stroke-width='1'%3E%3Cpath d='M40 20 L80 90 L0 90 Z'/%3E%3Cpath d='M190 40 L230 105 L150 105 Z'/%3E%3Cpath d='M100 150 L150 235 L50 235 Z'/%3E%3Cpath d='M230 170 L260 220 L200 220 Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 260px 260px;
+  mask-image: radial-gradient(ellipse at 75% 15%, black, transparent 45%);
 }
 
 /* ---------- Blob ---------- */
@@ -269,38 +282,42 @@ body {
 
 /* ---------- About ---------- */
 .about { padding: 140px 0; background: var(--black); position: relative; }
+.about--first {
+  min-height: 100vh;
+  padding: 130px 0 60px;
+  display: flex;
+  align-items: stretch;
+}
+.about--first .wrap { width: 100%; }
 .about-grid {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
   gap: 80px;
-  align-items: center;
+  align-items: stretch;
 }
-.about-visual { display: flex; justify-content: center; }
+.about-visual { display: flex; justify-content: center; align-items: flex-end; }
 .about-frame {
   width: 100%;
-  max-width: 380px;
-  aspect-ratio: 4/5;
-  border-radius: 20px;
-  background: var(--black-alt);
-  border: 1px solid var(--line);
+  height: 100%;
   position: relative;
-  overflow: hidden;
 }
 .about-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
+  display: block;
   height: 100%;
-  object-fit: cover;
-  filter: grayscale(0.25) contrast(1.05);
+  width: auto;
+  max-width: 100%;
+  max-height: 640px;
+  object-fit: contain;
+  object-position: bottom;
+  margin: 0 auto;
+  mask-image: linear-gradient(to bottom, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 88%, transparent 100%);
 }
-.about-frame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 1px solid rgba(244,243,239,0.15);
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+.about--first .about-photo { max-height: none; }
+.about--first .about-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .about-text {
   color: var(--gray-1);
@@ -377,7 +394,7 @@ body {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--gray-1);
+  color: var(--accent);
   margin-bottom: 6px;
 }
 .portfolio-name {
@@ -429,19 +446,15 @@ body {
   border-top: 1px solid var(--line);
 }
 .service-card--highlight {
-  background: var(--off-white);
-  color: var(--black);
+  background: var(--black);
+  border-color: var(--accent);
   transform: scale(1.04);
 }
-.service-card--highlight .service-desc,
-.service-card--highlight .service-price,
-.service-card--highlight .service-list li::before { color: var(--gray-2); }
-.service-card--highlight .service-list li { color: var(--black); }
 .service-badge {
   position: absolute;
   top: -14px;
   left: 30px;
-  background: var(--black);
+  background: var(--accent);
   color: var(--off-white);
   font-size: 11px;
   text-transform: uppercase;
@@ -508,7 +521,9 @@ body {
 @media (max-width: 980px) {
   .about-grid { grid-template-columns: 1fr; gap: 50px; }
   .tools-grid { grid-template-columns: repeat(2, 1fr); }
-  .about-visual { order: -1; }
+  .about-visual { order: -1; height: 440px; }
+  .about-photo { max-height: 440px; }
+  .about--first { min-height: 0; display: block; padding: 130px 0 60px; }
   .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
   .services-grid { grid-template-columns: 1fr; }
   .service-card--highlight { transform: none; }

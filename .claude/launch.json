@@ -4,7 +4,7 @@
     {
       "name": "site-kaine",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5173"],
+      "runtimeArgs": [".claude/devserver.py"],
       "port": 5173
     }
   ]
