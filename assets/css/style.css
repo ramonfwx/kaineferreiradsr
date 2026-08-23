@@ -319,6 +319,12 @@ body {
 }
 
 /* ---------- Tools (compact, inside About) ---------- */
+.about-tools-row {
+  display: flex;
+  gap: 56px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 .about-tools { margin-top: 34px; }
 .about-tools-label {
   font-size: 12px;
@@ -340,6 +346,41 @@ body {
   border: 1px solid var(--line);
   border-radius: 100px;
 }
+.about-tools-list--stack {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 4px;
+  max-width: 260px;
+  margin: 0 auto;
+}
+.about-tools-list--stack .about-tools-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 4px;
+  border: none;
+  border-radius: 0;
+  font-size: 16px;
+}
+.about-tools-icon {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  background-color: var(--off-white);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+.about-tools-icon--photoshop { mask-image: url('https://api.iconify.design/simple-icons/adobephotoshop.svg'); -webkit-mask-image: url('https://api.iconify.design/simple-icons/adobephotoshop.svg'); }
+.about-tools-icon--corel { mask-image: url('https://api.iconify.design/simple-icons/coreldraw.svg'); -webkit-mask-image: url('https://api.iconify.design/simple-icons/coreldraw.svg'); }
+.about-tools-icon--capcut { mask-image: url('https://api.iconify.design/arcticons/capcut.svg'); -webkit-mask-image: url('https://api.iconify.design/arcticons/capcut.svg'); }
+.about-tools-icon--canva { mask-image: url('https://api.iconify.design/simple-icons/canva.svg'); -webkit-mask-image: url('https://api.iconify.design/simple-icons/canva.svg'); }
+.about-tools-icon--chatgpt { mask-image: url('https://api.iconify.design/simple-icons/openai.svg'); -webkit-mask-image: url('https://api.iconify.design/simple-icons/openai.svg'); }
+.about-tools-icon--claude { mask-image: url('https://api.iconify.design/simple-icons/claude.svg'); -webkit-mask-image: url('https://api.iconify.design/simple-icons/claude.svg'); }
 
 /* ---------- Portfolio ---------- */
 .portfolio { padding: 140px 0; background: var(--black); }
