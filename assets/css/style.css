@@ -158,7 +158,7 @@ body {
   position: absolute;
   bottom: 0; left: 0;
   width: 100%; height: 2px;
-  background: var(--accent);
+  background: var(--off-white);
 }
 
 .header-cta { flex-shrink: 0; }
@@ -387,8 +387,8 @@ body {
 .portfolio { padding: 140px 0; background: var(--black); }
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
 }
 .portfolio-card {
   position: relative;
@@ -425,7 +425,7 @@ body {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--accent);
+  color: var(--off-white);
   margin-bottom: 6px;
 }
 .portfolio-name {
@@ -478,15 +478,15 @@ body {
 }
 .service-card--highlight {
   background: var(--black);
-  border-color: var(--accent);
+  border-color: var(--off-white);
   transform: scale(1.04);
 }
 .service-badge {
   position: absolute;
   top: -14px;
   left: 30px;
-  background: var(--accent);
-  color: var(--off-white);
+  background: var(--off-white);
+  color: var(--black);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
