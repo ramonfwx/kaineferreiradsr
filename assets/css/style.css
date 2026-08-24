@@ -531,9 +531,9 @@ body {
   margin-bottom: 30px;
 }
 .master-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   text-align: left;
   margin-bottom: 30px;
 }
