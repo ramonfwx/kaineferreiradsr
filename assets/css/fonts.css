@@ -53,3 +53,11 @@
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "Transducer";
+  src: url("../fonts/TransducerTest-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
