@@ -508,16 +508,16 @@ body {
   position: relative;
   width: 100%;
   max-width: 720px;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--off-white);
   border-radius: 28px;
   padding: 56px 48px;
   background: linear-gradient(165deg, var(--black-alt) 0%, var(--black) 60%);
-  box-shadow: 0 0 60px var(--accent-soft);
+  box-shadow: 0 0 60px rgba(252,248,232,0.18);
 }
 .master-badge {
   display: inline-block;
-  background: var(--accent);
-  color: var(--off-white);
+  background: var(--off-white);
+  color: var(--black);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -549,7 +549,7 @@ body {
   position: absolute;
   left: 0; top: 8px;
   width: 6px; height: 1px;
-  background: var(--accent);
+  background: var(--off-white);
 }
 .master-card .service-price {
   display: inline-block;
