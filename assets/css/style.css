@@ -66,13 +66,21 @@ body {
   line-height: 1.08;
   margin-bottom: 28px;
 }
-#sobre .section-title { font-family: "Transducer", "Epilogue", sans-serif; text-transform: uppercase; }
+#sobre .section-title { font-family: "Epilogue", sans-serif; font-weight: 700; text-transform: uppercase; }
 .section-title .thin {
   font-weight: 300;
   color: var(--gray-1);
 }
 .section-title .bold {
   font-weight: 700;
+  color: var(--off-white);
+}
+.title-mark {
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  margin-left: 0.15em;
+  vertical-align: middle;
   color: var(--off-white);
 }
 
@@ -449,7 +457,22 @@ body {
   flex-direction: column;
   background: var(--black);
   position: relative;
+  transition: transform 0.4s var(--ease);
 }
+.service-card:hover { transform: translateY(-6px); }
+.service-card--highlight:hover { transform: scale(1.04) translateY(-6px); }
+.service-card--hover-line { overflow: hidden; }
+.service-card--hover-line::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--off-white);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+.service-card--hover-line:hover::after { transform: scaleX(1); }
 .service-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; }
 .service-desc { color: var(--gray-1); font-size: 14px; margin-bottom: 24px; }
 .service-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; flex: 1; }
@@ -462,8 +485,9 @@ body {
 .service-list li::before {
   content: "";
   position: absolute;
-  left: 0; top: 8px;
-  width: 6px; height: 1px;
+  left: 2px; top: 7px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
   background: var(--gray-1);
 }
 .service-price {
@@ -476,13 +500,13 @@ body {
 }
 .service-card--highlight {
   background: var(--black);
-  border-color: var(--off-white);
   transform: scale(1.04);
 }
 .service-badge {
   position: absolute;
   top: -14px;
-  left: 30px;
+  left: 50%;
+  transform: translateX(-50%);
   background: var(--off-white);
   color: var(--black);
   font-size: 11px;
@@ -515,12 +539,13 @@ body {
   position: relative;
   width: 100%;
   max-width: 480px;
-  border: 1px solid var(--off-white);
-  border-radius: 28px;
-  padding: 56px 48px;
-  background: linear-gradient(165deg, var(--black-alt) 0%, var(--black) 60%);
-  box-shadow: 0 0 60px rgba(252,248,232,0.18);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 40px 30px;
+  background: var(--black);
+  transition: transform 0.4s var(--ease);
 }
+.master-card.reveal:hover { transform: translateY(-6px); }
 .master-badge {
   font-size: 22px;
   font-weight: 700;
@@ -549,8 +574,9 @@ body {
 .master-list li::before {
   content: "";
   position: absolute;
-  left: 0; top: 8px;
-  width: 6px; height: 1px;
+  left: 2px; top: 7px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
   background: var(--off-white);
 }
 .master-card .service-price {
@@ -584,7 +610,9 @@ body {
   flex-wrap: wrap;
 }
 .contact-text { flex: 1; min-width: 280px; }
-.contact .section-title { align-items: flex-start; }
+.contact .section-title { align-items: flex-start; text-transform: uppercase; }
+#avulsos .section-title,
+.master-tagline .section-title { text-transform: uppercase; }
 .contact-lead { color: var(--gray-1); font-size: 17px; max-width: 520px; }
 .contact-actions { display: flex; flex-direction: column; gap: 16px; flex-shrink: 0; }
 .contact-links {
