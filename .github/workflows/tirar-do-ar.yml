@@ -1,0 +1,84 @@
+name: Tirar o site do ar
+
+# Agendado para 00:00 de 16/10/2026 (horário de Brasília) = 03:00 UTC.
+# O cron tem várias tentativas (03:03 a 08:03 UTC) porque o GitHub pode atrasar
+# ou pular execuções agendadas. Depois da primeira que der certo, as outras não fazem nada.
+# Para voltar o site: git revert do commit "Tira o site do ar" e git push.
+# Teste sem derrubar nada: Actions > Tirar o site do ar > Run workflow (dry_run = true).
+
+on:
+  schedule:
+    - cron: '3 3-8 16 10 *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Só simular (não derruba o site)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Conferir janela de tempo e se já está fora do ar
+        id: check
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
+            now=$(date -u +%s)
+            inicio=$(date -u -d '2026-10-16 03:00:00' +%s)
+            fim=$(date -u -d '2026-10-17 03:00:00' +%s)
+            if [ "$now" -lt "$inicio" ] || [ "$now" -ge "$fim" ]; then
+              echo "Fora da janela agendada; nada a fazer."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          if grep -q 'site-fora-do-ar' index.html 2>/dev/null; then
+            echo "O site já está fora do ar; nada a fazer."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Trocar o site pela página de aviso
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          cp .github/offline/index.html /tmp/offline.html
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name .github -exec rm -rf {} +
+          cp /tmp/offline.html index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          echo "Mudanças que serão publicadas:"
+          git status --short | head -50
+          git commit -m "Tira o site do ar (agendado para 00:00 de 16/10/2026)"
+
+      - name: Publicar (derruba o site)
+        if: steps.check.outputs.skip == 'false' && env.DRY_RUN != 'true'
+        run: |
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" || echo "Não foi possível pedir o build manualmente; o push já dispara o build."
+
+      - name: Confirmar que o site saiu do ar
+        if: steps.check.outputs.skip == 'false' && env.DRY_RUN != 'true'
+        run: |
+          url="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/"
+          for i in $(seq 1 20); do
+            if curl -fsS -H 'Cache-Control: no-cache' "${url}?t=$(date +%s)" | grep -q 'site-fora-do-ar'; then
+              echo "Confirmado: o site está fora do ar."
+              exit 0
+            fi
+            echo "Tentativa $i: o site ainda não mudou; aguardando..."
+            sleep 30
+          done
+          echo "ATENÇÃO: o push foi feito, mas o site ainda não mostra a página de aviso."
+          exit 1
