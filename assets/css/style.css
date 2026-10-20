@@ -434,17 +434,164 @@ body {
   padding: 22px;
   border: 1px solid var(--line);
   background: var(--black-alt);
-  transition: transform 0.4s var(--ease);
+  --rx: 0deg;
+  --ry: 0deg;
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.6s var(--ease), border-color 0.4s var(--ease);
 }
-.portfolio-card:hover { transform: translateY(-6px); }
-.portfolio-card:hover .portfolio-img { transform: scale(1.06); }
+.portfolio-card:hover {
+  border-color: rgba(252, 248, 232, 0.3);
+  transform: perspective(900px) translateY(-6px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.18s ease-out, border-color 0.4s var(--ease);
+}
+.portfolio-card:active { transform: perspective(900px) scale(0.98); }
+.portfolio-card:hover .portfolio-img { transform: scale(1.07); }
+.portfolio-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.14), transparent 55%);
+  transition: opacity 0.4s var(--ease);
+}
+.portfolio-card:hover::after { opacity: 1; }
 .portfolio-img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s var(--ease);
+  transition: transform 0.9s var(--ease);
+}
+
+/* Filtro em pílula (Identidade Visual / Artes) */
+.portfolio-filter {
+  position: relative;
+  display: inline-flex;
+  padding: 4px;
+  margin-bottom: 36px;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: rgba(252, 248, 232, 0.03);
+}
+.portfolio-filter-thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  width: 0;
+  border-radius: 100px;
+  background: var(--off-white);
+  transform: translateX(var(--thumb-x, 4px));
+  transition: transform 0.55s var(--ease), width 0.55s var(--ease);
+}
+.portfolio-tab {
+  position: relative;
+  z-index: 1;
+  padding: 11px 24px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--gray-1);
+  transition: color 0.35s var(--ease);
+}
+.portfolio-tab:hover { color: var(--off-white); }
+.portfolio-tab.is-active { color: var(--black); }
+.portfolio-tab:focus-visible { outline: 2px solid var(--off-white); outline-offset: 2px; }
+.portfolio-card[hidden] { display: none; }
+
+/* Entrada em cascata dos cards (inicial e ao trocar de aba) */
+@keyframes cardIn {
+  from { opacity: 0; transform: perspective(900px) translateX(-32px) scale(0.97); filter: blur(6px); }
+}
+@media (min-width: 981px) {
+  .portfolio-grid[data-view="identidade"] { --cols: 4; }
+}
+.js .portfolio-grid:not(.is-in) .portfolio-card { opacity: 0; }
+.portfolio-grid.is-in .portfolio-card {
+  animation: cardIn 0.85s var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+.portfolio-grid.is-leaving .portfolio-card {
+  opacity: 0;
+  transform: perspective(900px) translateY(-10px) scale(0.98);
+  transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+}
+
+/* Textos que alternam (rotator) */
+.rotator { display: grid; }
+.rotator-item {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  transition: visibility 0s linear 1s;
+}
+.rotator-item > span {
+  opacity: 0;
+  transform: translateY(0.4em);
+  filter: blur(8px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease), filter 0.9s var(--ease);
+}
+.rotator-item.is-active { visibility: visible; transition-delay: 0s; }
+.rotator-item.is-active > span { opacity: 1; transform: none; filter: none; }
+.rotator-item.is-active > span:nth-child(2) { transition-delay: 0.14s; }
+.rotator-item.is-leaving { visibility: visible; transition-delay: 0s; }
+.rotator-item.is-leaving > span { opacity: 0; transform: translateY(-0.4em); filter: blur(8px); }
+
+/* Abertura: logo girando com fade */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  transition: opacity 0.9s var(--ease), visibility 0s linear 0.9s;
+}
+html.intro-active { overflow: hidden; }
+html.intro-active .intro { display: flex; }
+.intro.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  transition: transform 1s var(--ease);
+}
+.intro.is-leaving .intro-inner { transform: scale(1.06); }
+.intro-mark {
+  width: 92px;
+  height: auto;
+  opacity: 0;
+  transform: rotate(-220deg) scale(0.55);
+  animation: introMark 1.7s cubic-bezier(.22,.9,.28,1) 0.15s forwards;
+}
+.intro-word {
+  width: 176px;
+  height: auto;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(10px);
+  animation: introWord 1.1s var(--ease) 1s forwards;
+}
+@keyframes introMark {
+  0%   { opacity: 0; transform: rotate(-220deg) scale(0.55); }
+  45%  { opacity: 1; }
+  100% { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+@keyframes introWord {
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotator-item > span, .portfolio-filter-thumb, .portfolio-card, .portfolio-img { transition: none; }
+  .portfolio-grid.is-in .portfolio-card { animation: none; }
+  .js .portfolio-grid:not(.is-in) .portfolio-card { opacity: 1; }
 }
 .portfolio-cat {
   position: relative; z-index: 2;
@@ -652,12 +799,28 @@ body {
 /* ---------- Reveal animation ---------- */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transform: translateX(-36px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0);
+}
+
+/* Grupos que entram em cascata, da esquerda para a direita */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-34px); filter: blur(5px); }
+}
+.js [data-stagger]:not(.is-visible) > * { opacity: 0; }
+[data-stagger].is-visible > * {
+  animation: slideIn 0.9s var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * 100ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .js [data-stagger]:not(.is-visible) > * { opacity: 1; }
+  [data-stagger].is-visible > * { animation: none; }
 }
 
 /* ---------- Responsive ---------- */
@@ -665,6 +828,7 @@ body {
   .about-grid { grid-template-columns: 1fr; gap: 50px; }
   .about--first { padding: 130px 0 60px; }
   .portfolio-grid { --cols: 2; }
+  .portfolio-card.is-wide { width: 100%; aspect-ratio: 16 / 11; }
   .services-grid { grid-template-columns: 1fr; }
   .service-card--highlight { transform: none; }
   .blob-wrap { width: 400px; height: 400px; opacity: 0.6; }
@@ -723,6 +887,10 @@ body {
   .portfolio-card { border-radius: 14px; padding: 14px; }
   .portfolio-name { font-size: 13px; }
   .portfolio-cat { font-size: 9px; }
+  .portfolio-filter { margin-bottom: 24px; }
+  .portfolio-tab { padding: 9px 18px; font-size: 13px; }
+  .intro-mark { width: 62px; }
+  .intro-word { width: 124px; }
 
   .services-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .service-card { padding: 18px 14px; min-width: 0; min-height: 225px; }

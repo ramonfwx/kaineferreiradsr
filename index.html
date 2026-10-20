@@ -8,9 +8,25 @@
 <link rel="icon" type="image/png" href="assets/logo/akine-icon.png">
 <link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/style.css">
+<script>
+  (function () {
+    var root = document.documentElement;
+    root.classList.add("js");
+    try {
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduce && !sessionStorage.getItem("akineIntro")) root.classList.add("intro-active");
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-inner">
+    <img class="intro-mark" src="assets/logo/akine-icon.png" alt="">
+    <img class="intro-word" src="assets/logo/akine-wordmark.png" alt="">
+  </div>
+</div>
 
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
@@ -97,74 +113,80 @@
   <!-- PORTFOLIO -->
   <section class="portfolio" id="portfolio">
     <div class="wrap">
-      <p class="section-tag">Portfólio</p>
+      <p class="section-tag reveal">Portfólio</p>
 
-      <div class="portfolio-grid reveal">
-        <a href="assets/artes/hermes-gym-logo.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+      <div class="portfolio-filter reveal" role="tablist" aria-label="Categorias do portfólio">
+        <span class="portfolio-filter-thumb" aria-hidden="true"></span>
+        <button type="button" role="tab" class="portfolio-tab is-active" id="tab-identidade" aria-selected="true" aria-controls="portfolioGrid" data-filter="identidade">Identidade Visual</button>
+        <button type="button" role="tab" class="portfolio-tab" id="tab-artes" aria-selected="false" aria-controls="portfolioGrid" data-filter="artes">Artes</button>
+      </div>
+
+      <div class="portfolio-grid" id="portfolioGrid" role="tabpanel" aria-labelledby="tab-identidade">
+        <a href="assets/artes/hermes-gym-logo.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="identidade">
           <img class="portfolio-img" src="assets/artes/hermes-gym-logo.jpeg" alt="Logotipo da Hermes Gym em versões clara e escura" loading="lazy">
           <span class="portfolio-name">Hermes Gym · Logo</span>
         </a>
-        <a href="assets/artes/hermes-gym-aplicacoes.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/hermes-gym-aplicacoes.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="identidade">
           <img class="portfolio-img" src="assets/artes/hermes-gym-aplicacoes.jpeg" alt="Aplicações da marca Hermes Gym em ecobag, legging, top e kettlebell" loading="lazy">
           <span class="portfolio-name">Hermes Gym · Aplicações</span>
         </a>
-        <a href="assets/artes/atlas-engenharia.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/atlas-engenharia.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="identidade">
           <img class="portfolio-img" src="assets/artes/atlas-engenharia.jpeg" alt="Identidade visual da Atlas Engenharia em capacetes, crachás, uniformes e papelaria" loading="lazy">
           <span class="portfolio-name">Atlas Engenharia</span>
         </a>
-        <a href="assets/artes/delavie-encante-no-vestir.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/delavie-encante-no-vestir.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="identidade">
           <img class="portfolio-img" src="assets/artes/delavie-encante-no-vestir.jpeg" alt="Identidade visual Delavie, Encante no vestir, em placa, embalagens, sacola e papelaria" loading="lazy">
           <span class="portfolio-name">Delavie · Encante no vestir</span>
         </a>
-        <a href="assets/artes/delavie-moda-feminina.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/delavie-moda-feminina.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="identidade">
           <img class="portfolio-img" src="assets/artes/delavie-moda-feminina.jpeg" alt="Identidade visual Delavie Moda Feminina com borboleta em sacola, tag, cartões e xícara" loading="lazy">
           <span class="portfolio-name">Delavie · Moda Feminina</span>
         </a>
-        <a href="assets/artes/astralink.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/astralink.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="identidade">
           <img class="portfolio-img" src="assets/artes/astralink.jpeg" alt="Identidade visual da Astralink em app, camisa, ecobag, outdoor e notebook" loading="lazy">
           <span class="portfolio-name">Astralink</span>
         </a>
-        <a href="assets/artes/delicie-doces-gourmet.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/delicie-doces-gourmet.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="identidade">
           <img class="portfolio-img" src="assets/artes/delicie-doces-gourmet.jpeg" alt="Identidade visual da Delicié Doces Gourmet em cartões e padronagem" loading="lazy">
           <span class="portfolio-name">Delicié Doces Gourmet</span>
         </a>
-        <a href="assets/artes/michael-jackson.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/michael-jackson.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/michael-jackson.jpeg" alt="Pôster em homenagem a Michael Jackson" loading="lazy">
           <span class="portfolio-name">Michael Jackson</span>
         </a>
-        <a href="assets/artes/nike-dunk.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/nike-dunk.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/nike-dunk.jpeg" alt="Arte de divulgação do tênis Nike Dunk" loading="lazy">
           <span class="portfolio-name">Nike Dunk</span>
         </a>
-        <a href="assets/artes/nike-air-jordan.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/nike-air-jordan.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/nike-air-jordan.jpeg" alt="Arte de divulgação do tênis Nike Air Jordan" loading="lazy">
           <span class="portfolio-name">Nike Air Jordan</span>
         </a>
-        <a href="assets/artes/lagrimas-negras.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/lagrimas-negras.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/lagrimas-negras.jpeg" alt="Capa de CD Lágrimas Negras, de Gal Costa" loading="lazy">
           <span class="portfolio-name">Lágrimas Negras</span>
         </a>
-        <a href="assets/artes/fobel-raqueteira-macaw.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/fobel-raqueteira-macaw.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/fobel-raqueteira-macaw.jpeg" alt="Post de lançamento da raqueteira Macaw 4.0 — Fobel" loading="lazy">
           <span class="portfolio-name">Raqueteira Macaw 4.0</span>
         </a>
-        <a href="assets/artes/fobel-macaw-raquete.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/fobel-macaw-raquete.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/fobel-macaw-raquete.jpeg" alt="Post de lançamento da raquete Macaw 4.0 — Fobel" loading="lazy">
           <span class="portfolio-name">Raquete Macaw 4.0</span>
         </a>
-        <a href="assets/artes/fobel-collection-macaw.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/fobel-collection-macaw.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/fobel-collection-macaw.jpeg" alt="Divulgação da coleção de roupas Macaw 4.0 — Fobel" loading="lazy">
           <span class="portfolio-name">Coleção Macaw 4.0</span>
         </a>
-        <a href="assets/artes/fobel-tecido-detalhes.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/fobel-tecido-detalhes.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/fobel-tecido-detalhes.jpeg" alt="Detalhes de tecido e tecnologia das peças — Fobel" loading="lazy">
           <span class="portfolio-name">Detalhes de Tecido</span>
         </a>
-        <a href="assets/artes/fobel-wolf.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/fobel-wolf.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/fobel-wolf.jpeg" alt="Post de lançamento da raquete Wolf — Fobel" loading="lazy">
           <span class="portfolio-name">Raquete Wolf</span>
         </a>
-        <a href="assets/artes/fobel-panther.jpeg" target="_blank" rel="noopener" class="portfolio-card">
+        <a href="assets/artes/fobel-panther.jpeg" target="_blank" rel="noopener" class="portfolio-card" data-cat="artes">
           <img class="portfolio-img" src="assets/artes/fobel-panther.jpeg" alt="Post de lançamento da raquete Panther — Fobel" loading="lazy">
           <span class="portfolio-name">Raquete Panther</span>
         </a>
@@ -175,9 +197,9 @@
   <!-- PACOTES -->
   <section class="services" id="pacotes">
     <div class="wrap">
-      <p class="section-tag">Pacotes de Artes</p>
+      <p class="section-tag reveal">Pacotes de Artes</p>
 
-      <div class="services-grid reveal">
+      <div class="services-grid" data-stagger>
         <div class="service-card service-card--hover-line">
           <h3>Básico</h3>
           <ul class="service-list">
@@ -225,7 +247,7 @@
         </div>
       </div>
 
-      <p class="services-footnote">
+      <p class="services-footnote reveal">
         Obs: À vista via Pix no início do projeto.<br>Parcelado: 50% no início
         e 50% na entrega final das artes.
       </p>
@@ -236,9 +258,23 @@
   <section class="master" id="master">
     <div class="wrap master-inner">
       <div class="master-tagline reveal">
-        <h2 class="section-title">
-          <span class="thin">Uma identidade</span>
-          <span class="bold">que não passa despercebida</span>
+        <h2 class="section-title rotator" data-rotator="5200">
+          <span class="rotator-item is-active">
+            <span class="thin">Uma identidade</span>
+            <span class="bold">que não passa despercebida</span>
+          </span>
+          <span class="rotator-item" aria-hidden="true">
+            <span class="thin">Design que comunica</span>
+            <span class="bold">antes de uma palavra</span>
+          </span>
+          <span class="rotator-item" aria-hidden="true">
+            <span class="thin">Estratégia e estética</span>
+            <span class="bold">em cada traço</span>
+          </span>
+          <span class="rotator-item" aria-hidden="true">
+            <span class="thin">Cada detalhe</span>
+            <span class="bold">pensado para marcar</span>
+          </span>
         </h2>
       </div>
     </div>
@@ -247,13 +283,13 @@
   <!-- AVULSOS -->
   <section class="avulsos" id="avulsos">
     <div class="wrap">
-      <p class="section-tag">Peças Avulsas</p>
-      <h2 class="section-title">
+      <p class="section-tag reveal">Peças Avulsas</p>
+      <h2 class="section-title reveal">
         <span class="thin">Materiais</span>
         <span class="bold">sob demanda</span>
       </h2>
 
-      <div class="about-tools-list about-tools-list--stack avulsos-list reveal">
+      <div class="about-tools-list about-tools-list--stack avulsos-list" data-stagger>
         <span class="about-tools-item">Logo</span>
         <span class="about-tools-item">Identidade Visual</span>
         <span class="about-tools-item">Mídia Kit</span>
@@ -266,7 +302,7 @@
         <span class="about-tools-item">Design de estamparia</span>
       </div>
 
-      <p class="services-footnote">
+      <p class="services-footnote reveal">
         Para materiais não listados, consulte disponibilidade e orçamento.<br>
         Importante: os valores sob consulta referem-se apenas à criação das
         artes.<br>Impressão não inclusa.
@@ -278,11 +314,25 @@
   <section class="contact" id="contato">
     <div class="wrap contact-inner">
       <div class="contact-top">
-        <div class="contact-text">
+        <div class="contact-text" data-stagger>
           <p class="section-tag">Contato</p>
-          <h2 class="section-title">
-            <span class="thin">Projetos bem feitos</span>
-            <span class="bold">começam com uma boa conversa <svg class="title-mark" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><rect x="42" y="0" width="16" height="100"/><rect x="42" y="0" width="16" height="100" transform="rotate(60 50 50)"/><rect x="42" y="0" width="16" height="100" transform="rotate(120 50 50)"/></g></svg></span>
+          <h2 class="section-title rotator" data-rotator="5800">
+            <span class="rotator-item is-active">
+              <span class="thin">Sua marca merece</span>
+              <span class="bold">ser inesquecível <svg class="title-mark" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><rect x="42" y="0" width="16" height="100"/><rect x="42" y="0" width="16" height="100" transform="rotate(60 50 50)"/><rect x="42" y="0" width="16" height="100" transform="rotate(120 50 50)"/></g></svg></span>
+            </span>
+            <span class="rotator-item" aria-hidden="true">
+              <span class="thin">Vamos criar algo</span>
+              <span class="bold">que fique na memória <svg class="title-mark" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><rect x="42" y="0" width="16" height="100"/><rect x="42" y="0" width="16" height="100" transform="rotate(60 50 50)"/><rect x="42" y="0" width="16" height="100" transform="rotate(120 50 50)"/></g></svg></span>
+            </span>
+            <span class="rotator-item" aria-hidden="true">
+              <span class="thin">Do conceito</span>
+              <span class="bold">ao detalhe final <svg class="title-mark" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><rect x="42" y="0" width="16" height="100"/><rect x="42" y="0" width="16" height="100" transform="rotate(60 50 50)"/><rect x="42" y="0" width="16" height="100" transform="rotate(120 50 50)"/></g></svg></span>
+            </span>
+            <span class="rotator-item" aria-hidden="true">
+              <span class="thin">Sua marca</span>
+              <span class="bold">pronta para brilhar <svg class="title-mark" viewBox="0 0 100 100" aria-hidden="true"><g fill="currentColor"><rect x="42" y="0" width="16" height="100"/><rect x="42" y="0" width="16" height="100" transform="rotate(60 50 50)"/><rect x="42" y="0" width="16" height="100" transform="rotate(120 50 50)"/></g></svg></span>
+            </span>
           </h2>
           <p class="contact-lead">
             Obrigado por chegar até aqui.<br>Se fizer sentido para você, será um prazer<br>
@@ -290,7 +340,7 @@
           </p>
         </div>
 
-        <div class="contact-actions reveal">
+        <div class="contact-actions" data-stagger>
           <a href="https://wa.me/5594991916818" target="_blank" rel="noopener" class="btn btn-solid">Fale comigo</a>
           <a href="mailto:akinedesign@gmail.com" class="btn btn-outline">Enviar e-mail</a>
 
