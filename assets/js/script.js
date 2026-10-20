@@ -50,6 +50,31 @@ const pThumb = document.querySelector(".portfolio-filter-thumb");
 let currentFilter = "identidade";
 let switching = false;
 
+/* Projetos com várias artes: selo "N artes" no card */
+pCards.forEach((card) => {
+  const extras = card.querySelectorAll(".portfolio-piece").length;
+  if (!extras) return;
+  card.classList.add("is-group");
+  const badge = document.createElement("span");
+  badge.className = "portfolio-badge";
+  badge.setAttribute("aria-hidden", "true");
+  badge.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>' +
+    (extras + 1) + " artes";
+  card.insertBefore(badge, card.querySelector(".portfolio-name"));
+});
+
+const pickCols = (n) => {
+  let best = 5;
+  let bestScore = -1;
+  [5, 4, 3].forEach((c) => {
+    const rem = n % c;
+    const score = rem === 0 ? 100 : rem;
+    if (score > bestScore) { best = c; bestScore = score; }
+  });
+  return best;
+};
+
 const layoutThumb = () => {
   const active = document.querySelector(".portfolio-tab.is-active");
   pThumb.style.width = active.offsetWidth + "px";
@@ -65,6 +90,7 @@ const applyFilter = (cat) => {
   pGrid.setAttribute("aria-labelledby", "tab-" + cat);
   const visible = pCards.filter((card) => !card.hidden);
   visible.forEach((card, i) => card.style.setProperty("--i", i));
+  pGrid.style.setProperty("--cols-desktop", pickCols(visible.length));
   if (visible.length % 2 === 1) visible[visible.length - 1].classList.add("is-wide");
 };
 
@@ -227,7 +253,7 @@ const lbCloseBtn = lb.querySelector(".lb-close");
 const lbPrevBtn = lb.querySelector(".lb-prev");
 const lbNextBtn = lb.querySelector(".lb-next");
 
-let lbList = [];
+let lbSlides = [];
 let lbIndex = 0;
 let lbOpener = null;
 let lbIsOpen = false;
@@ -254,28 +280,52 @@ const lbSize = () => {
   lb.style.setProperty("--lb-h", Math.round(h) + "px");
 };
 
+const lbBuildSlides = () => {
+  const slides = [];
+  pCards.filter((c) => !c.hidden).forEach((card) => {
+    const main = {
+      card,
+      src: card.getAttribute("href"),
+      alt: card.querySelector("img").alt,
+      label: card.dataset.label || card.querySelector(".portfolio-name").textContent,
+    };
+    const extras = Array.from(card.querySelectorAll(".portfolio-piece")).map((p) => ({
+      card,
+      src: p.dataset.src,
+      alt: p.dataset.alt,
+      label: p.dataset.label,
+    }));
+    const all = [main, ...extras];
+    all.forEach((s, i) => { s.index = i; s.total = all.length; });
+    slides.push(...all);
+  });
+  return slides;
+};
+
 const lbFill = (i) => {
-  const card = lbList[i];
-  const thumb = card.querySelector("img");
-  const name = card.querySelector(".portfolio-name").textContent;
-  lb.querySelector(".lb-title").textContent = name;
-  lb.querySelector(".lb-back-title").textContent = name;
-  lb.querySelector(".lb-back-cat").textContent = card.dataset.cat === "identidade" ? "Identidade Visual" : "Artes";
-  lb.querySelector(".lb-original").href = card.getAttribute("href");
-  lb.querySelector(".lb-count").textContent = (i + 1) + " / " + lbList.length;
-  lbPrevBtn.hidden = lbNextBtn.hidden = lbList.length < 2;
-  lbImg.alt = thumb.alt;
+  const slide = lbSlides[i];
+  lb.querySelector(".lb-title").textContent = slide.label;
+  lb.querySelector(".lb-back-title").textContent = slide.label;
+  lb.querySelector(".lb-back-cat").textContent = slide.card.dataset.cat === "identidade" ? "Identidade Visual" : "Artes";
+  lb.querySelector(".lb-original").href = slide.src;
+  const dots = lb.querySelector(".lb-dots");
+  if (dots.children.length !== (slide.total > 1 ? slide.total : 0)) {
+    dots.innerHTML = slide.total > 1 ? '<i class="lb-dot"></i>'.repeat(slide.total) : "";
+  }
+  Array.from(dots.children).forEach((dot, d) => dot.classList.toggle("is-active", d === slide.index));
+  lbPrevBtn.hidden = lbNextBtn.hidden = lbSlides.length < 2;
+  lbImg.alt = slide.alt;
   return new Promise((resolve) => {
     const done = () => { lbSize(); resolve(); };
     lbImg.onload = done;
     lbImg.onerror = done;
-    lbImg.src = card.getAttribute("href");
+    lbImg.src = slide.src;
     if (lbImg.complete && lbImg.naturalWidth) done();
   });
 };
 
 const lbSetLifted = (card) => {
-  lbList.forEach((c) => c.classList.toggle("is-lifted", c === card));
+  pCards.forEach((c) => c.classList.toggle("is-lifted", c === card));
 };
 
 const lbFlyFrame = (from, to) => {
@@ -322,8 +372,8 @@ const lbOpenAt = async (card) => {
   if (lbIsOpen || lbBusy) return;
   lbBusy = true;
   lbOpener = card;
-  lbList = pCards.filter((c) => !c.hidden);
-  lbIndex = Math.max(0, lbList.indexOf(card));
+  lbSlides = lbBuildSlides();
+  lbIndex = Math.max(0, lbSlides.findIndex((s) => s.card === card));
   await lbFill(lbIndex);
 
   lb.hidden = false;
@@ -362,7 +412,7 @@ const lbClose = async () => {
   lb.classList.remove("is-open");
   lbFace = 0;
   lbHover.on = false;
-  const card = lbList[lbIndex];
+  const card = lbSlides[lbIndex].card;
   const from = card.getBoundingClientRect();
   const visible = from.bottom > 0 && from.top < window.innerHeight && from.right > 0 && from.left < window.innerWidth;
   const to = lbFly.getBoundingClientRect();
@@ -384,23 +434,23 @@ const lbClose = async () => {
   anim.cancel();
   lbStopLoop();
   root.classList.remove("lb-open");
-  lbList.forEach((c) => c.classList.remove("is-lifted"));
+  pCards.forEach((c) => c.classList.remove("is-lifted"));
   if (lbOpener) lbOpener.focus({ preventScroll: true });
   lbBusy = false;
 };
 
 const lbGo = async (dir) => {
-  if (lbBusy || lbList.length < 2) return;
+  if (lbBusy || lbSlides.length < 2) return;
   lbBusy = true;
-  lbIndex = (lbIndex + dir + lbList.length) % lbList.length;
+  lbIndex = (lbIndex + dir + lbSlides.length) % lbSlides.length;
   lbCard.classList.add("is-swapping");
   await lbWait(reduceMotion ? 0 : 220);
   await lbFill(lbIndex);
   lbFace = 0;
   lbRot.y = -dir * 34;
   lbRot.vy = 0;
-  lbSetLifted(lbList[lbIndex]);
-  lbOpener = lbList[lbIndex];
+  lbSetLifted(lbSlides[lbIndex].card);
+  lbOpener = lbSlides[lbIndex].card;
   lbCard.classList.remove("is-swapping");
   lbBusy = false;
 };
