@@ -912,6 +912,7 @@ html.intro-active .intro { display: flex; }
 .master-tagline .section-title { text-transform: uppercase; }
 .contact-lead { color: var(--gray-1); font-size: 17px; max-width: 520px; }
 .contact-actions { display: flex; flex-direction: column; gap: 16px; flex-shrink: 0; }
+.contact-actions .section-tag { margin-bottom: 2px; }
 .contact-links {
   display: flex;
   gap: 20px;
@@ -1089,6 +1090,7 @@ html.intro-active .intro { display: flex; }
 
   .contact-top { justify-content: center; }
   .contact-actions { align-items: center; gap: 10px; }
+  .contact-actions .section-tag { margin-bottom: 4px; }
   .contact-actions .btn { padding: 11px 22px; font-size: 12px; }
   .contact-links--compact { max-width: 240px; margin: 10px auto 0; gap: 8px; }
   .contact-links--compact .contact-link { padding: 10px 14px; }
